@@ -18,13 +18,13 @@ async function getPDFUrl(token: string) {
   return product?.pdf_storage_path;
 }
 
-export default async function PDFViewerPage({ params }: { params: { token: string } }) {
-  const pdfUrl = await getPDFUrl(params.token);
-  if (!pdfUrl) return notFound();
+export default async function PDFViewerPage({ params }: { params: Promise<{ token: string }> }) {
+  const { token } = await params;
+  const pdfUrl = `/api/protected-pdf?token=${token}`;
 
   return (
     <div className="h-screen w-full">
-      <iframe src={pdfUrl} className="w-full h-full border-none" />
+      <iframe src={pdfUrl} className="w-full h-full border-none" title="PDF Viewer" />
     </div>
   );
 }
